@@ -10,8 +10,9 @@
 
 #include "main.h"
 
+
 int main(void){
-	
+	initialize();
   // Enable High Speed Internal Clock (HSI = 16 MHz)
   RCC->CR |= ((uint32_t)RCC_CR_HSION);
 	
@@ -38,5 +39,12 @@ int main(void){
   // Dead loop & program hangs here
   while(1);
 
+}
+
+void initialize(){
+	/* Calling initializing functions*/
+	UART2_Init();
+	
+	/* Initializing program variables*/	
 }
 
