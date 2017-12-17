@@ -20,6 +20,14 @@ int main(void){
 	
 	print("\n\rQuit button has been pressed!! \n\rExiting program...");
 	
+	/*
+	According to the datasheet:
+	http://www.micropik.com/PDF/HCSR04.pdf
+	
+	Distance = High_level_time * velocity of sound / 2
+	where velocity of sound = (340m/s)
+	*/
+	
 }
 
 

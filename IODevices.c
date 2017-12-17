@@ -1,17 +1,17 @@
 #include "IODevices.h"
 
 void setupFanController(void){
-	
 	///////////////////////////////////////////////////////////////////////////////////////////////
-	///                     							  FAN CONTROLLER          											      ///
+	///                     							ULTRASONIC SENSOR         											      ///
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;	  	//ENABLING PORT A GPIO CLOCK
 	
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;	  	
-	TIM2->PSC = 800;					// One clock would be 10us
-	TIM2->ARR = 5000-1; 			// Period is 50ms
-	TIM2->CCR1 = 1;						// For one clock
+	TIM2->PSC = 800-1;													// One clock would be 10us
+	TIM2->ARR = 6550; 													// Period is 50ms
+	//TIM2->ARR = 5000; 													// Period is 50ms
+	TIM2->CCR1 = 1;															// For one clock
 	
 	TIM2->CCMR1 |=  0x70; 										
   TIM2->CCMR1 |= TIM_CCMR1_OC1PE;  					
@@ -27,11 +27,11 @@ void setupFanController(void){
 void setupUltrasonicTrigger(void){
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
-	///                     							ULTRASONIC SENSOR         											      ///
+	///                     							  FAN CONTROLLER          											      ///
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
-	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;	  	//ENABLING PORT A GPIO CLOCK
-	GPIOA->MODER = 0xBFE;			   							//ALTERNATE FUCTION AF1 //802
+	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;	  	//ENABLING PORT A GPIO CLOCK					A3     A2     A1      A0
+	GPIOA->MODER = 0xBFE;			   							//ALTERNATE FUCTION AF1 //802         10     00     00      10            <-10 is Alternate Function
 	//GPIOA->PUPDR &= ~(GPIO_PUPDR_PUPDR6); 	//Pull up or pull down, do not make any difference
 	//GPIOA->PUPDR |=  GPIO_PUPDR_PUPDR6_1; 
 	
@@ -39,8 +39,8 @@ void setupUltrasonicTrigger(void){
 	
 	//CLOCK AND TIMERS
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM5EN;	  	//ENABLING TIME CLOCK
-	TIM5->PSC = 64000;												//80MHz / 64000 = 1.25 MHz;  	
-	TIM5->ARR = 100000-1; 											//SETTING THE FREQUENCY
+	TIM5->PSC = 64000-1;											//80MHz / 64000 = 1.25 MHz;  	
+	TIM5->ARR = 100000;   										//SETTING THE FREQUENCY
 	TIM5->CCR1 = 1940;												//SETTING SERVO 1 POSITION 1 DEFAULT
 
 	//PWM						
@@ -55,13 +55,24 @@ void setupUltrasonicTrigger(void){
 }
 
 void setupUltrasonicEcho(void){
-    RCC->APB1ENR1 |= RCC_APB1ENR1_TIM4EN;				// ENABLE CLOCK FOR TIMER 4
-    TIM4->PSC=80;                              	// SET PSC
-    TIM4->EGR  |= TIM_EGR_UG;                   // LOAD PSC
-    TIM4->CCER&= ~(0XFFFFFFFF);
-    TIM4->CCMR1 |= 0X1;                         // SELECT CH1
-    TIM4->CCER |= (1<<1 | 1<<3);      					// SELECT RISING EDGES
-    TIM4->CCER|= 0X1;
-    TIM4->CR1 |= TIM_CR1_CEN;
+	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;				// *
+
+	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM4EN;				// ENABLE CLOCK FOR TIMER 4
+	TIM4->PSC = 160-1;                          // SET PSC
+	// TIM4->EGR  |= TIM_EGR_UG;                   // LOAD PSC
+	// TIM4->CCER&= ~(0xFFFFFFFF);
+	TIM4->CCMR1 &= ~TIM_CCMR1_CC1S;							// SET DIRECTION AS INPUT
+	TIM4->CCMR1 |= 0x01;                        // SELECT ACTIVE INPUT AS CH1
+	TIM4->CCMR1 &= ~TIM_CCMR1_IC1F;							// DISABLE DIGITAL FILTERING
+
+	TIM4->CCER|= (1<<1 | 1<<3);      						// SELECT BOTH RISING AND FALLING EDGES
+	TIM4->CCMR1 &= ~(TIM_CCMR1_IC1PSC);					// PROGRAM INPUT PSC TO CAPTURE EACH TRANSITION
+	TIM4->CCER	|= TIM_CCCER_CC1E;								// ENABLE CAPTURE OF COUNTER
+	TIM4->DIER |= TIM_DIER_CC1DE;
+	
+	TIM4->CCMR1 &= ~(TIM_CCER_CC1E);						// ENABLE 
+
+	TIM4->CCER|= 0x01;
+	TIM4->CR1 |= TIM_CR1_CEN;
 }
 	
