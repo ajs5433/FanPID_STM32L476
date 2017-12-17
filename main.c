@@ -30,7 +30,9 @@ void initialize(){
 	/* Calling initializing functions*/
 	System_Clock_Init();
 	UART2_Init();
-	initPWMs();
+	setupUltrasonicEcho();
+	setupUltrasonicTrigger();
+	setupFanController();
 	
 	/* Initializing program variables*/	
 	quit 				= false;
