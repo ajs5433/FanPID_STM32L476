@@ -7,6 +7,9 @@
 #include <stdio.h>
 
 /* Program Variables */
-int string;
-
-void initialize();
+int 	string;
+char 	input;
+int n;
+int i;
+void initialize(void);
+uint8_t buffer[20];

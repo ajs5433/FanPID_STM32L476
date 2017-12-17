@@ -12,7 +12,33 @@
 
 
 int main(void){
+	
+	
+	
 	initialize();
+	
+	
+	while(1){
+	if((USART2->ISR & USART_ISR_RXNE)) // Wait until RXNE (RX not empty) bit is set
+	{
+			// USART resets the RXNE flag automatically after reading DR
+			//printStr("Got new char\r\n");
+			input = (uint8_t)(USART2->RDR & 0xFF);
+		
+			n = sprintf((char *)buffer, "something pressed! yet\n\r");
+			USART_Write(USART2,buffer , n);
+	
+	}
+		
+	//int n;
+	n = sprintf((char *)buffer, "nothing pressed yet\n\r");
+	
+	USART_Write(USART2,buffer , n);
+	
+	//int i;
+	for (i=0;i<50000;i++);
+}
+	/*
   // Enable High Speed Internal Clock (HSI = 16 MHz)
   RCC->CR |= ((uint32_t)RCC_CR_HSION);
 	
@@ -38,7 +64,7 @@ int main(void){
   
   // Dead loop & program hangs here
   while(1);
-
+	*/
 }
 
 void initialize(){
