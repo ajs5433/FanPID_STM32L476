@@ -30,6 +30,7 @@ void initialize(){
 	/* Calling initializing functions*/
 	System_Clock_Init();
 	UART2_Init();
+	initPWMs();
 	
 	/* Initializing program variables*/	
 	quit 				= false;

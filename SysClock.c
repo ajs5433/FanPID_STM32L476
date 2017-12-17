@@ -50,10 +50,10 @@ void System_Clock_Init(void){
 	while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL);
 	
 	// The maximum frequency of the AHB, the APB1 and the APB2 domains is 80 MHz.
-	RCC->CFGR &= ~RCC_CFGR_HPRE;  // AHB prescaler = 1; SYSCLK not divided
-	RCC->CFGR &= ~RCC_CFGR_PPRE1; // APB high-speed prescaler (APB1) = 1, HCLK not divided
-	RCC->CFGR &= ~RCC_CFGR_PPRE2; // APB high-speed prescaler (APB2) = 1, HCLK not divided
-	
+	 RCC->CFGR &= ~RCC_CFGR_HPRE;  // AHB prescaler = 1; SYSCLK not divided
+	 RCC->CFGR &= ~RCC_CFGR_PPRE1; // APB high-speed prescaler (APB1) = 1, HCLK not divided
+	 RCC->CFGR &= ~RCC_CFGR_PPRE2; // APB high-speed prescaler (APB2) = 1, HCLK not divided
+  
 	// RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLM;
 	// RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLN;
 	// RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLP; 
