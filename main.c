@@ -13,64 +13,76 @@
 
 int main(void){
 	
-	
-	
 	initialize();
 	
+	while(!quit)
+		checkUserInput();
 	
-	while(1){
-	if((USART2->ISR & USART_ISR_RXNE)) // Wait until RXNE (RX not empty) bit is set
-	{
-			// USART resets the RXNE flag automatically after reading DR
-			//printStr("Got new char\r\n");
-			input = (uint8_t)(USART2->RDR & 0xFF);
-		
-			n = sprintf((char *)buffer, "something pressed! yet\n\r");
-			USART_Write(USART2,buffer , n);
-	
-	}
-		
-	//int n;
-	n = sprintf((char *)buffer, "nothing pressed yet\n\r");
-	
-	USART_Write(USART2,buffer , n);
-	
-	//int i;
-	for (i=0;i<50000;i++);
 }
-	/*
-  // Enable High Speed Internal Clock (HSI = 16 MHz)
-  RCC->CR |= ((uint32_t)RCC_CR_HSION);
-	
-  // wait until HSI is ready
-  while ( (RCC->CR & (uint32_t) RCC_CR_HSIRDY) == 0 ) {;}
-	
-  // Select HSI as system clock source 
-  RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
-  RCC->CFGR |= (uint32_t)RCC_CFGR_SW_HSI;  //01: HSI16 oscillator used as system clock
 
-  // Wait till HSI is used as system clock source 
-  while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) == 0 ) {;}
-  
-  // Enable the clock to GPIO Port B	
-  RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;   
-
-  // MODE: 00: Input mode, 01: General purpose output mode
-  //       10: Alternate function mode, 11: Analog mode (reset state)
-  GPIOB->MODER &= ~(0x03<<(2*2)) ;   // Clear bit 13 and bit 12
-  GPIOB->MODER |= (1<<4);
-		
-  GPIOB->ODR |= GPIO_ODR_ODR_2;
-  
-  // Dead loop & program hangs here
-  while(1);
-	*/
-}
 
 void initialize(){
 	/* Calling initializing functions*/
+	System_Clock_Init();
 	UART2_Init();
 	
 	/* Initializing program variables*/	
+	quit 				= false;
+	print_echo 	= false;
 }
 
+void print(char *string){
+	n = sprintf((char *)buffer, string);
+	USART_Write(USART2,buffer , n);
+}
+
+void checkUserInput(){
+
+	if((USART2->ISR & USART_ISR_RXNE))
+	{
+		input_key = (uint8_t)(USART2->RDR & 0xFF);
+
+		switch(input_key){
+			case('e'):
+			case('E'):
+				displayEcho();
+				break;
+			case('h'):
+			case('H'):
+				displayHelp();
+				break;
+			case('P'):
+			case('p'):
+				printCurrentValues();
+				break;
+			case('s'):
+			case('S'):
+				changeSetPoint();
+				break;
+			case('q'):
+			case('Q'):
+				quit = true;
+				break;
+			case('='):
+			case('+'):
+				increaseSetPoint();
+				break;
+			case('-'):
+				decreaseSetPoint();
+				break;
+			case(13):
+				print_echo = ~print_echo;
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+
+void displayEcho(){}
+void displayHelp(){}
+void printCurrentValues(){}
+void changeSetPoint(){}
+void increaseSetPoint(){}
+void decreaseSetPoint(){}
