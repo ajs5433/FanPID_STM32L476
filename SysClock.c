@@ -53,6 +53,10 @@ void System_Clock_Init(void){
 	 RCC->CFGR &= ~RCC_CFGR_HPRE;  // AHB prescaler = 1; SYSCLK not divided
 	 RCC->CFGR &= ~RCC_CFGR_PPRE1; // APB high-speed prescaler (APB1) = 1, HCLK not divided
 	 RCC->CFGR &= ~RCC_CFGR_PPRE2; // APB high-speed prescaler (APB2) = 1, HCLK not divided
+   //RCC->CFGR &= ~RCC_CFGR_HPRE;  // AHB prescaler = 1; SYSCLK not divided
+   /*I believe its the timer divided by 8 with PRE1*/
+	 //RCC->CFGR |= RCC_CFGR_PPRE1; // APB high-speed prescaler (APB1) = 1, HCLK not divided
+	 //RCC->CFGR &= ~RCC_CFGR_PPRE2; // APB high-speed prescaler (APB2) = 1, HCLK not divided
   
 	// RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLM;
 	// RCC->PLLCFGR &= ~RCC_PLLCFGR_PLLN;

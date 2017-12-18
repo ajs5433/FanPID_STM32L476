@@ -1,6 +1,8 @@
-#define 	SP_STEP		(100)
-#define 	SP_MAX		(1000)
-#define 	SP_MIN		(0)
+#define 	SP_STEP			(100)
+#define 	SP_MAX			(1000)
+#define 	SP_MIN			(0)
+#define 	MAX_COUNTER	(2500000)
+#define 	SYS_FREQ		(80000000)
 
 #include "stm32l476xx.h"
 #include "UART.h"
@@ -16,6 +18,7 @@
 bool 	quit;
 bool  print_echo;
 
+int 	print_echo_counter;
 int 	n;													
 int 	i;													
 char 	input_key;
@@ -32,7 +35,8 @@ int temp1, temp2;
 int timer_value_last;
 int timer_value_current;
 int interrupt_count;
-int calculated_echo;
+
+float echo_time_on;									// time the echo signal from the ultrasonic sensor is on, Echo Time On
 
 void initialize(void);						
 void print(char* string);					

@@ -15,18 +15,13 @@ int main(void){
 	
 	initialize();
 	
-	while(!quit)
+	while(!quit){
 		checkUserInput();
+		getEcho();
+	}
 	
 	print("\n\rQuit button has been pressed!! \n\rExiting program...");
 	
-	/*
-	According to the datasheet:
-	http://www.micropik.com/PDF/HCSR04.pdf
-	
-	Distance = High_level_time * velocity of sound / 2
-	where velocity of sound = (340m/s)
-	*/
 	
 }
 
@@ -38,9 +33,10 @@ void initialize(){
 	/* Calling initializing functions*/
 	System_Clock_Init();
 	UART2_Init();
+	
+	setupFanController();
 	setupUltrasonicEcho();
 	setupUltrasonicTrigger();
-	setupFanController();
 	
 	/* Initializing program variables*/	
 	quit 				= false;
@@ -192,19 +188,46 @@ void decreaseSetPoint(void){
 
 }
 
+
+/* Activated with interrupt of Ultrasonic Sensor 
+*  if rising edge, store the value, else calculate echo
+*  print echo only if necessary
+*/
+
 void getEcho(void){
-	if(TIM4->SR&0x02){
+	if(TIM4->SR&TIM_SR_CC1IF != 0){
 		interrupt_count++;
 		
-		// check if rising edge
-		if(!interrupt_count%2==0){
+		if(!interrupt_count%2==1){
 			timer_value_last 		= TIM4->CCR1;	
 		}else{
+			
+			interrupt_count = 0;
+			
 			timer_value_current = TIM4->CCR1;
-			calculated_echo = timer_value_current - timer_value_last;
-			echo = calculated_echo;
+			echo_time_on = timer_value_current - timer_value_last;
+			
+			/*
+			According to the datasheet:
+			http://www.micropik.com/PDF/HCSR04.pdf
+			
+			Distance = High_level_time * velocity of sound / 2 ... where:
+			velocity of sound = (340m/s)
+			high level time		= (PSC/80E6)(counter value <= echo_time_on) 
+			*/	
+			//echo_time_on = (ULTRASONIC_ECHO_PSC / SYS_FREQ)*(echo_time_on);
+			
+			echo = echo_time_on;
 		}
-	
+		
+		if(print_echo){
+			print_echo_counter++;
+			if(print_echo_counter >= MAX_COUNTER){
+				print_echo_counter = 0;
+				displayEcho();
+			}
+		}
+		
 	}
 
 }
