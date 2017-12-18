@@ -54,7 +54,9 @@ void initialize(){
 	ki		= 0;
 	kd		=	0;
 	
-	set_point = 50;
+	interrupt_count			= 0;
+	timer_value_current	= 0;
+	set_point 			 		= 50;
 	
 	/* Clear Screen*/
 	print("\n\r\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSTARTING PROGRAM!!\n\r");
@@ -190,3 +192,19 @@ void decreaseSetPoint(void){
 
 }
 
+void getEcho(void){
+	if(TIM4->SR&0x02){
+		interrupt_count++;
+		
+		// check if rising edge
+		if(!interrupt_count%2==0){
+			timer_value_last 		= TIM4->CCR1;	
+		}else{
+			timer_value_current = TIM4->CCR1;
+			calculated_echo = timer_value_current - timer_value_last;
+			echo = calculated_echo;
+		}
+	
+	}
+
+}

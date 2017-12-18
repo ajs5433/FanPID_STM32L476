@@ -54,12 +54,14 @@ void setupUltrasonicTrigger(void){
 	TIM5->EGR |= TIM_EGR_UG;					
 }
 
+
+/*
 void setupUltrasonicEcho(void){
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;				// *
 
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM4EN;				// ENABLE CLOCK FOR TIMER 4
 	TIM4->PSC = 160-1;                          // SET PSC
-	// TIM4->EGR  |= TIM_EGR_UG;                   // LOAD PSC
+	// TIM4->EGR  |= TIM_EGR_UG;                // LOAD PSC
 	// TIM4->CCER&= ~(0xFFFFFFFF);
 	TIM4->CCMR1 &= ~TIM_CCMR1_CC1S;							// SET DIRECTION AS INPUT
 	TIM4->CCMR1 |= 0x01;                        // SELECT ACTIVE INPUT AS CH1
@@ -67,6 +69,8 @@ void setupUltrasonicEcho(void){
 
 	TIM4->CCER|= (1<<1 | 1<<3);      						// SELECT BOTH RISING AND FALLING EDGES
 	TIM4->CCMR1 &= ~(TIM_CCMR1_IC1PSC);					// PROGRAM INPUT PSC TO CAPTURE EACH TRANSITION
+	
+	// CHECK FROM HERE I THINK
 	TIM4->CCER	|= TIM_CCCER_CC1E;							// ENABLE CAPTURE OF COUNTER
 	TIM4->DIER |= TIM_DIER_CC1DE;
 	
@@ -74,5 +78,26 @@ void setupUltrasonicEcho(void){
 
 	TIM4->CCER|= 0x01;
 	TIM4->CR1 |= TIM_CR1_CEN;
+	
+	
 }
+*/
+
+void setupUltrasonicEcho(void){
+		RCC->AHB2ENR |=   RCC_AHB2ENR_GPIOBEN;
+																								// set pin PB6 in alternate function mode
+    GPIOB-> MODER &= ~(0X03<<(2*6));  					//CLEAR 12TH AND 13TH BIT
+    GPIOB-> MODER |= 0X02<<(2*6);
+    GPIOB-> AFR[0] |= 0X2<<(4*6);								// PIN PB6 AS AF TIM4
+    RCC-> APB1ENR1 |= RCC_APB1ENR1_TIM4EN;			// ENABLE CLOCK FOR TIMER 4
+    
+    TIM4-> PSC=80;                              //prescaler
+    TIM4->EGR  |= TIM_EGR_UG;                   //Load new prescaler
+    TIM4->CCER&= ~(0XFFFFFFFF);
+    TIM4->CCMR1 |= 0X1;                         //select ch1
+    TIM4->CCER |= (1<<1 | 1<<3);      					//To select only rising edges
+    TIM4->CCER|= 0X1;
+    TIM4->CR1 |= TIM_CR1_CEN;
+}
+
 	

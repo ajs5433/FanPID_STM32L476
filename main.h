@@ -28,9 +28,11 @@ int duty;
 int set_point;
 int kp, ki, kd;
 
-
 int temp1, temp2;			
-
+int timer_value_last;
+int timer_value_current;
+int interrupt_count;
+int calculated_echo;
 
 void initialize(void);						
 void print(char* string);					
@@ -43,5 +45,8 @@ void printCurrentValues(void);
 void changeSetPoint(void);
 void increaseSetPoint(void);
 void decreaseSetPoint(void);
+
+
+void getEcho(void);
 
 uint8_t buffer[20];
