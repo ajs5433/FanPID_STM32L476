@@ -42,7 +42,9 @@ void initialize(){
 	quit 				= false;
 	print_echo 	= false;
 	
-	echo 	= 0;
+	echo 			= 0;		
+	min_echo 	= 0; 	
+	max_echo 	= 0;
 	max		= 0;
 	min		= 65535;
 	duty	= 0;
@@ -217,6 +219,11 @@ void getEcho(void){
 			*/	
 			//echo_time_on = (ULTRASONIC_ECHO_PSC / SYS_FREQ)*(echo_time_on);
 			
+			/*
+			while(!(GPIOB->IDR & GPIO_IDR_IDR_6));
+			*/
+			
+			
 			echo = echo_time_on;
 		}
 		
@@ -231,3 +238,43 @@ void getEcho(void){
 	}
 
 }
+
+
+void getMaxEcho(void){
+	TIM5->CCR1 	= MIN_DUTY;
+	max_echo		= 0;
+	temp1 			= 0;
+	
+	/* max_echo = echo until value does not change for a while*/
+	while (temp1<MAX_COUNTER){
+		getEcho();
+		if(echo>max_echo){
+			max_echo = echo;
+			temp1 = 0;
+		}else{
+			temp1++;
+		}	
+	}
+}
+
+void getMinEcho(void){
+	TIM5->CCR1 = MAX_DUTY;
+	
+	/* waiting for fan to take momentum*/
+	for(temp1=0;temp1<5000;temp1++);
+	
+	min_echo 	= MAX_INT16;
+	temp1 		= 0;
+	
+	/* min_echo = echo until value does not change for a while*/
+	while (temp1<MAX_COUNTER){
+		getEcho();
+		if(echo<min_echo){
+			min_echo = echo;
+			temp1 = 0;
+		}else{
+			temp1++;
+		}	
+	}
+}
+

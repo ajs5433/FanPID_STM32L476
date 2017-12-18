@@ -11,21 +11,21 @@ void setupFanController(void){
 	GPIOA->MODER = 0x802;			   							//ALTERNATE FUCTION AF1 //802         10     00     00      10            <-10 is Alternate Function
 	GPIOA->AFR[0]=0x111112;										//SETTING AF2 AS THE SELECTED ALTERNATE FUNC
 	
-	GPIOA->PUPDR &= ~(GPIO_PUPDR_PUPDR6); 	//Pull up or pull down, do not make any difference
-	//GPIOA->PUPDR |=  GPIO_PUPDR_PUPDR6_1; 
+	//GPIOA->PUPDR &= ~(GPIO_PUPDR_PUPDR6); 	//Pull up or pull down, do not make any difference
+	GPIOA->PUPDR |=  GPIO_PUPDR_PUPDR6_1; 
 	
 	//CLOCK AND TIMERS
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM5EN;	  	//ENABLING TIME CLOCK
-	TIM5->PSC = 2.00-1;												//80MHz / 64000 = 1.25 MHz;  	
-	TIM5->ARR = 100000;   										//SETTING THE FREQUENCY
-	TIM5->CCR1 = 1940;												//SETTING SERVO 1 POSITION 1 DEFAULT
+	TIM5->PSC = 4-1;												//80MHz / 4000 = 20 kHz;  	
+	TIM5->ARR = 1000;   										//SETTING THE FREQUENCY
+	TIM5->CCR1 = 500;												//SETTING SERVO 1 POSITION 1 DEFAULT
 	
-	TIM4->CCMR1 |= 0x01;                        // SELECT ACTIVE INPUT AS CH1
+	TIM4->CCMR1 |= 0x01;                      // SELECT ACTIVE INPUT AS CH1
 	
 	//PWM						
 	TIM5->CCMR1 |=  0x70; 							      			//6 SETTING PWM MODE-2
   TIM5->CCMR1 |= TIM_CCMR1_OC1PE;  								//ENABLING PRELOAD REGISTER
-	TIM5->CR1 	|= TIM_CR1_ARPE ;						    			//SETTING THE APRE TO 1 AND SINCHRONIZE WITH PSC
+	TIM5->CR1 	|= TIM_CR1_ARPE ;						    		//SETTING THE APRE TO 1 AND SINCHRONIZE WITH PSC
 	TIM5->CCER 	|= TIM_CCER_CC1E | TIM_CCER_CC1P;		// - CAPTURE/COMPARE ENABLE - 0 ACTIVE HIGH 1 ACTIVE LOW - SIGNAL OUTPUT ( 0 NOT ACTIVE)   
 	//TIM2->BDTR |= TIM_BDTR_OSSI | TIM_BDTR_OSSR | TIM_BDTR_MOE;				//this was set up but then commented because TIM2 doesnt have BDTR register on the reference manual	
 	

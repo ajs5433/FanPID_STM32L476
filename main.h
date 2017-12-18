@@ -2,6 +2,7 @@
 #define 	SP_MAX			(1000)
 #define 	SP_MIN			(0)
 #define 	MAX_COUNTER	(2500000)
+#define 	MAX_INT16		(65535)
 #define 	SYS_FREQ		(80000000)
 
 #include "stm32l476xx.h"
@@ -19,6 +20,9 @@ bool 	quit;
 bool  print_echo;
 
 int 	print_echo_counter;
+int 	min_echo;
+int 	max_echo;
+
 int 	n;													
 int 	i;													
 char 	input_key;
@@ -38,7 +42,11 @@ int interrupt_count;
 
 float echo_time_on;									// time the echo signal from the ultrasonic sensor is on, Echo Time On
 
+/* Setup functions*/
 void initialize(void);						
+void getMaxEcho(void);
+void getMinEcho(void);
+
 void print(char* string);					
 void checkUserInput(void);				
 
