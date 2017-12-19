@@ -17,26 +17,18 @@ int main(void){
 	
 	while(!quit){
 		checkUserInput();
+		echo = TIM4_Echo_read();
 		getEcho();
 	}
 	
 	print("\n\rQuit button has been pressed!! \n\rExiting program...");
-	
-	
+		
 }
 
 
 
 
-
 void initialize(){
-	/* Calling initializing functions*/
-	System_Clock_Init();
-	UART2_Init();
-	
-	setupFanController();
-	setupUltrasonicEcho();
-	setupUltrasonicTrigger();
 	
 	/* Initializing program variables*/	
 	quit 				= false;
@@ -56,6 +48,13 @@ void initialize(){
 	timer_value_current	= 0;
 	set_point 			 		= 50;
 	
+	/* Calling initializing functions*/
+	System_Clock_Init();
+	UART2_Init();
+	setupFanController();
+	setupUltrasonicEcho();
+	setupUltrasonicTrigger();
+	
 	/* Clear Screen*/
 	print("\n\r\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSTARTING PROGRAM!!\n\r");
 }
@@ -64,8 +63,6 @@ void print(char *string){
 	n = sprintf((char *)buffer, string);
 	USART_Write(USART2,buffer , n);
 }
-
-
 
 
 
@@ -259,7 +256,6 @@ void getMaxEcho(void){
 }
 
 void getMinEcho(void){
-	echo = timespan;
 	TIM5->CCR1 = MAX_DUTY;
 	
 	/* waiting for fan to take momentum*/
