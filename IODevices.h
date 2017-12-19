@@ -12,3 +12,10 @@ void setupFanController(void);
 void setupUltrasonicTrigger(void);
 void setupUltrasonicEcho(void);
 
+volatile int overflow; 
+
+
+volatile int timespan = 0;      // Total pulse width
+volatile int lastcounter = 0;   // Timer counter value of the last event
+volatile int newcounter = 0;    // Timer counter value of the current event
+volatile int overflow = 0;      // Count the number of overflows

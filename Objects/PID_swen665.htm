@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\PID_swen665.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\PID_swen665.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060300: Last Updated: Mon Dec 18 15:40:06 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060300: Last Updated: Mon Dec 18 20:56:29 2017
 <BR><P>
 <H3>Maximum Stack Usage =        152 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -791,11 +791,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkUserInput
 </UL>
 
-<P><STRONG><a name="[8a]"></a>getEcho</STRONG> (Thumb, 154 bytes, Stack size 8 bytes, main.o(i.getEcho))
+<P><STRONG><a name="[8a]"></a>getEcho</STRONG> (Thumb, 150 bytes, Stack size 8 bytes, main.o(i.getEcho))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136 + Unknown Stack Size
-<LI>Call Chain = getEcho &rArr; displayEcho &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
+<LI>Call Chain = getEcho &rArr; print &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;displayEcho
+<BR>[Calls]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;displayEcho
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -846,6 +847,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printCurrentValues
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initialize
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getEcho
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;displayHelp
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkUserInput
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;changeSetPoint
@@ -866,7 +868,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initialize
 </UL>
 
-<P><STRONG><a name="[8e]"></a>setupUltrasonicEcho</STRONG> (Thumb, 158 bytes, Stack size 0 bytes, iodevices.o(i.setupUltrasonicEcho))
+<P><STRONG><a name="[8e]"></a>setupUltrasonicEcho</STRONG> (Thumb, 186 bytes, Stack size 0 bytes, iodevices.o(i.setupUltrasonicEcho))
 <BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initialize
 </UL>
 

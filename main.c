@@ -197,10 +197,11 @@ void decreaseSetPoint(void){
 */
 
 void getEcho(void){
-	if(TIM4->SR&TIM_SR_CC1IF != 0){
+	if((TIM4->SR&TIM_SR_CC1IF) != 0){
+		print("metemano\n\r");
 		interrupt_count++;
 		
-		if(!interrupt_count%2==1){
+		if(interrupt_count%2!=1){
 			timer_value_last 		= TIM4->CCR1;	
 		}else{
 			
@@ -258,6 +259,7 @@ void getMaxEcho(void){
 }
 
 void getMinEcho(void){
+	echo = timespan;
 	TIM5->CCR1 = MAX_DUTY;
 	
 	/* waiting for fan to take momentum*/
